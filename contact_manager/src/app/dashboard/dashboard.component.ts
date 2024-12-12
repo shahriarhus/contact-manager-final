@@ -1,6 +1,7 @@
 // src/app/dashboard/dashboard.component.ts
 
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router'; // Import Router for navigation
 import { ContactService } from '../contact.service'; // Import the ContactService
 import { Contact } from '../models/contact.model'; // Import the Contact model
 
@@ -12,10 +13,13 @@ import { Contact } from '../models/contact.model'; // Import the Contact model
 export class DashboardComponent implements OnInit {
   contacts: Contact[] = []; // Array to hold contacts
 
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private router: Router // Inject Router for navigation
+  ) {}
 
   ngOnInit(): void {
-    this.loadContacts();
+    this.loadContacts(); // Load contacts when the component initializes
   }
 
   // Load contacts from the backend
@@ -32,12 +36,12 @@ export class DashboardComponent implements OnInit {
 
   // Navigate to the add contact component
   addContact(): void {
-    // Redirect to the AddContactComponent (using Angular's Router)
+    this.router.navigate(['/add']); // Redirect to AddContactComponent route
   }
 
-  // Edit contact
+  // Navigate to the edit contact component
   editContact(id: string): void {
-    // Navigate to the EditContactComponent with the contact's ID
+    this.router.navigate([`/edit/${id}`]); // Redirect to EditContactComponent with the contact's ID
   }
 
   // Delete contact
@@ -51,4 +55,4 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-}
+} 
