@@ -1,7 +1,8 @@
+// src/app/dashboard/dashboard.component.ts
+
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Contact } from '../models/contact.model'; // Import the model
+import { ContactService } from '../contact.service'; // Import the ContactService
+import { Contact } from '../models/contact.model'; // Import the Contact model
 
 @Component({
   selector: 'app-dashboard',
@@ -9,33 +10,45 @@ import { Contact } from '../models/contact.model'; // Import the model
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  contacts: Contact[] = []; // Declare the contacts array with the Contact type
+  contacts: Contact[] = []; // Array to hold contacts
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private contactService: ContactService) {}
 
   ngOnInit(): void {
-    this.fetchContacts();
+    this.loadContacts();
   }
 
-  fetchContacts(): void {
-    this.http.get<Contact[]>('http://localhost:3000/contacts')
-      .subscribe(data => {
-        this.contacts = data;
-      });
+  // Load contacts from the backend
+  loadContacts(): void {
+    this.contactService.getContacts().subscribe(
+      (data: Contact[]) => {
+        this.contacts = data; // Assign the fetched contacts to the 'contacts' array
+      },
+      (error) => {
+        console.error('Error fetching contacts', error);
+      }
+    );
   }
 
+  // Navigate to the add contact component
   addContact(): void {
-    this.router.navigate(['/add']); // Navigate to the Add Contact page
+    // Redirect to the AddContactComponent (using Angular's Router)
   }
 
+  // Edit contact
   editContact(id: string): void {
-    this.router.navigate([`/edit/${id}`]); // Navigate to the Edit Contact page
+    // Navigate to the EditContactComponent with the contact's ID
   }
 
+  // Delete contact
   deleteContact(id: string): void {
-    this.http.delete(`http://localhost:3000/contacts/${id}`)
-      .subscribe(() => {
-        this.fetchContacts(); // Refresh the contacts list after deletion
-      });
+    this.contactService.deleteContact(id).subscribe(
+      () => {
+        this.loadContacts(); // Reload contacts after deletion
+      },
+      (error) => {
+        console.error('Error deleting contact', error);
+      }
+    );
   }
 }
