@@ -1,7 +1,9 @@
+// src/app/add-contact/add-contact.component.ts
+
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Contact } from '../models/contact.model'; // Import the model
+import { ContactService } from '../contact.service'; // Import the ContactService
+import { Contact } from '../models/contact.model'; // Import the Contact model
 
 @Component({
   selector: 'app-add-contact',
@@ -9,18 +11,22 @@ import { Contact } from '../models/contact.model'; // Import the model
   styleUrls: ['./add-contact.component.css']
 })
 export class AddContactComponent {
-  contact: Contact = { _id: '', name: '', email: '', number: 0 }; // Initialize with empty values
+  contact: Contact = { _id: '', name: '', email: '', number: 0 }; // Initialize the contact object
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private contactService: ContactService, private router: Router) {}
 
   saveContact(): void {
-    this.http.post<Contact>('http://localhost:3000/contacts', this.contact)
-      .subscribe(() => {
-        this.router.navigate(['/']); // Redirect to the dashboard
-      });
+    this.contactService.addContact(this.contact).subscribe(
+      () => {
+        this.router.navigate(['/']); // Redirect to dashboard after saving the contact
+      },
+      (error) => {
+        console.error('Error adding contact', error);
+      }
+    );
   }
 
   cancel(): void {
-    this.router.navigate(['/']); // Redirect to the dashboard without saving
+    this.router.navigate(['/']); // Redirect to dashboard without saving
   }
 }

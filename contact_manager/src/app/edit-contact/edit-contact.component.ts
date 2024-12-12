@@ -1,7 +1,9 @@
+// src/app/edit-contact/edit-contact.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Contact } from '../models/contact.model'; // Import the model
+import { ContactService } from '../contact.service'; // Import the ContactService
+import { Contact } from '../models/contact.model'; // Import the Contact model
 
 @Component({
   selector: 'app-edit-contact',
@@ -9,31 +11,40 @@ import { Contact } from '../models/contact.model'; // Import the model
   styleUrls: ['./edit-contact.component.css']
 })
 export class EditContactComponent implements OnInit {
-  contact: Contact = { _id: '', name: '', email: '', number: 0 }; // Initialize with empty values
-  private contactId: string = '';
+  contact: Contact = { _id: '', name: '', email: '', number: 0 };
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private contactService: ContactService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.contactId = this.route.snapshot.paramMap.get('id')!; // Get the contact ID from the URL
-    this.fetchContact();
-  }
-
-  fetchContact(): void {
-    this.http.get<Contact>(`http://localhost:3000/contacts/${this.contactId}`)
-      .subscribe(contact => {
-        this.contact = contact;
-      });
+    const id = this.activatedRoute.snapshot.paramMap.get('id'); // Get the contact ID from the route
+    if (id) {
+      this.contactService.getContact(id).subscribe(
+        (data: Contact) => {
+          this.contact = data; // Assign the fetched contact to the component's contact object
+        },
+        (error) => {
+          console.error('Error fetching contact', error);
+        }
+      );
+    }
   }
 
   saveContact(): void {
-    this.http.put<Contact>(`http://localhost:3000/contacts/${this.contactId}`, this.contact)
-      .subscribe(() => {
-        this.router.navigate(['/']); // Redirect to the dashboard after saving
-      });
+    this.contactService.updateContact(this.contact._id, this.contact).subscribe(
+      () => {
+        this.router.navigate(['/']); // Redirect to dashboard after saving the changes
+      },
+      (error) => {
+        console.error('Error updating contact', error);
+      }
+    );
   }
 
   cancel(): void {
-    this.router.navigate(['/']); // Redirect to the dashboard without saving
+    this.router.navigate(['/']); // Redirect to dashboard without making changes
   }
 }
