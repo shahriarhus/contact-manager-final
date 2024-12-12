@@ -1,66 +1,81 @@
+// server/server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
 
-app.use(cors());  // Allow cross-origin requests
-app.use(express.json());  // Parse incoming JSON requests
+// Middleware
+app.use(cors()); // Allow CORS for cross-origin requests
+app.use(bodyParser.json()); // Parse JSON bodies
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/contact_manager', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.log('Error connecting to MongoDB:', err));
+mongoose.connect('mongodb://localhost:27017/contact_manager', { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.log('MongoDB connection error:', err);
+});
 
-// Define the Contact schema
+// Contact schema and model
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   number: { type: Number, required: true }
 });
 
-// Define the Contact model
 const Contact = mongoose.model('Contact', contactSchema);
 
-// CRUD operations
-app.get('/contacts', async (req, res) => {
-  try {
-    const contacts = await Contact.find();
-    res.json(contacts);
-  } catch (err) {
-    res.status(400).send(err);
-  }
+// Routes for CRUD operations
+
+// Get all contacts
+app.get('/contacts', (req, res) => {
+  Contact.find()
+    .then(contacts => res.json(contacts))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
-app.post('/contacts', async (req, res) => {
-  const newContact = new Contact(req.body);
-  try {
-    await newContact.save();
-    res.status(201).json(newContact);
-  } catch (err) {
-    res.status(400).send(err);
-  }
+// Add a new contact
+app.post('/contacts', (req, res) => {
+  const { name, email, number } = req.body;
+
+  const newContact = new Contact({
+    name,
+    email,
+    number
+  });
+
+  newContact.save()
+    .then(() => res.json('Contact added!'))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
-app.put('/contacts/:id', async (req, res) => {
-  try {
-    const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updatedContact);
-  } catch (err) {
-    res.status(400).send(err);
-  }
+// Get a contact by ID
+app.get('/contacts/:id', (req, res) => {
+  Contact.findById(req.params.id)
+    .then(contact => res.json(contact))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
-app.delete('/contacts/:id', async (req, res) => {
-  try {
-    await Contact.findByIdAndDelete(req.params.id);
-    res.status(200).send('Deleted');
-  } catch (err) {
-    res.status(400).send(err);
-  }
+// Update a contact
+app.put('/contacts/:id', (req, res) => {
+  Contact.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(contact => res.json(contact))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// Delete a contact
+app.delete('/contacts/:id', (req, res) => {
+  Contact.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Contact deleted!'))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
