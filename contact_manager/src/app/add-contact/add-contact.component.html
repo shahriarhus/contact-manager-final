@@ -1,1 +1,17 @@
-<p>add-contact works!</p>
+<div>
+    <h2>Add Contact</h2>
+    <form>
+      <mat-form-field>
+        <input matInput [(ngModel)]="contact.name" name="name" placeholder="Name" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="contact.email" name="email" placeholder="Email" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [(ngModel)]="contact.number" name="number" placeholder="Phone Number" required />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="saveContact()">Save</button>
+      <button mat-raised-button (click)="cancel()">Cancel</button>
+    </form>
+  </div>
+  
