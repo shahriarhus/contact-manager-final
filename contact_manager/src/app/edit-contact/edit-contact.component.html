@@ -1,13 +1,16 @@
 <div>
     <h2>Edit Contact</h2>
-    <form>
+    <form class="cform">
       <mat-form-field>
+        <mat-hint class="text">Full Name</mat-hint>
         <input matInput [(ngModel)]="contact.name" name="name" placeholder="Name" required />
       </mat-form-field>
       <mat-form-field>
+        <mat-hint class="text">Email</mat-hint>
         <input matInput [(ngModel)]="contact.email" name="email" placeholder="Email" required />
       </mat-form-field>
       <mat-form-field>
+        <mat-hint class="text">Phone number</mat-hint>
         <input matInput [(ngModel)]="contact.number" name="number" placeholder="Phone Number" required />
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="saveContact()">Save</button>

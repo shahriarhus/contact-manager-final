@@ -1,0 +1,29 @@
+/* .cform{
+    padding: 1px !important;
+    display: block;
+} */
+
+form{
+    display: flex !important;
+    gap: 10px;
+    align-content: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+h2 {
+    color: azure !important;
+    margin-left: 20px !important;
+    margin-top: 20px !important;
+}
+
+button {
+    margin-top: 7px !important;
+}
+
+.text{
+    font-weight: 400;
+    color: azure;
+}
