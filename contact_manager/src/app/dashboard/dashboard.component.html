@@ -1,10 +1,10 @@
 <div class="dashboard">
-    <button mat-raised-button color="primary" (click)="addContact()">Add Contact</button>
+    <button class="add_button" mat-raised-button color="primary" (click)="addContact()">Add Contact</button>
   
     <div *ngIf="contacts.length === 0">No contacts</div>
   
     <div *ngFor="let contact of contacts" class="contact-card">
-      <mat-card>
+      <mat-card class="contact_card_style">
         <mat-card-header>
           <mat-card-title>{{ contact.name }}</mat-card-title>
           <mat-card-subtitle>{{ contact.email }}</mat-card-subtitle>

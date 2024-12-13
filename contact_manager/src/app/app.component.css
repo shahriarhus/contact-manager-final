@@ -1,0 +1,15 @@
+.header {
+    text-align: center;
+    /* font-family: cursive !important; */
+    background-color:azure;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    align-items: center;
+    color: rgb(0, 128, 255);
+    margin: auto;
+}
+
+.header h1{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
+}
