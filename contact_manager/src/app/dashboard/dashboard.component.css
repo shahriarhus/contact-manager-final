@@ -1,0 +1,13 @@
+
+.add_button {
+    /* align-items: right !important; */
+    padding: 20px !important;
+    margin: 10px !important;
+}
+
+.contact_card_style {
+    padding: 0px !important;
+    margin-left: 100px !important;
+    margin-right: 100px !important;
+    margin-bottom: 15px !important;
+}
