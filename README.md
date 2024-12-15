@@ -74,10 +74,12 @@ The application uses the following services:
 The application uses CSS styles to layout and design the components. The styles are defined in the `styles.css` file.
 
 <a id="howto"></a>
-## Instructions for Installing and Running 
 
-### Under Frontend 
-` ng new contact-app --standalone=false --skip-tests`
+## Instructions for Installing and Running
+
+### Under Frontend
+
+`ng new contact-app --standalone=false --skip-tests`
 
 #### Angular Material
 
