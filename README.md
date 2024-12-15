@@ -13,7 +13,7 @@ This is a simple contact manager application built using Angular and Express.js.
 
 ## Technologies Used
 
-* Frontend: Angular 18.2.13
+* Frontend: Angular 18.2.8
 * Backend: Express.js 4.17.1
 * Database: MongoDB
 
